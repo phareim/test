@@ -35,9 +35,9 @@ heavy -- wasm-pack build --target web --release --out-dir web/pkg --no-typescrip
 cd web && python3 -m http.server 8791   # local test
 ```
 
-Push to `main` → GitHub Actions builds the wasm and deploys `web/` to the Cloudflare
-Pages project `phareim-test`, served at https://test.phareim.no. Rust on Sleeper was
+Push to `main` → GitHub Actions builds the wasm and deploys `web/` as the static-assets-only
+Worker `phareim-test` (`wrangler.toml`), served at https://test.phareim.no. Rust on Sleeper was
 installed with rustup in `~/.cargo` for this repo (2026-09-28).
 
 This is a throwaway test. It is redundant once a real project adopts wgpu or the test
-has answered its question; then delete the Pages project and the `test` DNS record.
+has answered its question; then `npx wrangler delete phareim-test` (removes the custom domain too).

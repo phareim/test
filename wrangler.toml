@@ -1,0 +1,10 @@
+name = "phareim-test"
+compatibility_date = "2026-09-01"
+
+# Static site only: no Worker script, Cloudflare serves web/ directly.
+[assets]
+directory = "./web"
+
+[[routes]]
+pattern = "test.phareim.no"
+custom_domain = true
