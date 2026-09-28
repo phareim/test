@@ -224,6 +224,7 @@ fn wave(p: vec2f, t: f32) -> vec3f {
     let foam = foam_line * smoothstep(0.35, 0.7, noise2(in.uv * 5.0 + vec2f(t * 0.4, -t * 0.3)) + foam_line * 0.4);
     c = mix(c, vec3f(0.9, 0.95, 0.95) * (0.5 + 0.5 * sh), foam * 0.8);
 
-    let alpha = clamp(smoothstep(0.0, 1.2, depth) * 0.75 + fresnel + foam, 0.25, 1.0);
+    // Shallow water shows the sand; deep water is opaque so the seabed never shows through.
+    let alpha = clamp(smoothstep(0.0, 1.5, depth) + fresnel + foam, 0.25, 1.0);
     return finish(fog(c, in.world), alpha);
 }

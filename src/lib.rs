@@ -447,7 +447,7 @@ impl App {
             if !m.float {
                 continue;
             }
-            let bob = Mat4::from_translation(Vec3::new(0.0, (time * 1.3 + m.phase).sin() * 0.05 + 0.1, 0.0))
+            let bob = Mat4::from_translation(Vec3::new(0.0, (time * 1.3 + m.phase).sin() * 0.05 + 0.18, 0.0))
                 * Mat4::from_rotation_z((time * 0.9 + m.phase).sin() * 0.05)
                 * Mat4::from_rotation_x((time * 1.1 + m.phase).cos() * 0.04);
             let model = bob * m.base;
