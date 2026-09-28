@@ -428,7 +428,7 @@ impl App {
 
         let sky = scene::Sky::at(self.sun);
         let light_view = look_at_mat4(sky.dir * 40.0, Vec3::ZERO, Vec3::Y);
-        let light_proj = proj::orthographic(-17.0, 17.0, -17.0, 17.0, 1.0, 90.0);
+        let light_proj = proj::orthographic(-24.0, 24.0, -24.0, 24.0, 1.0, 90.0);
 
         let globals = Globals {
             view_proj: view_proj.to_cols_array_2d(),
@@ -447,7 +447,7 @@ impl App {
             if !m.float {
                 continue;
             }
-            let bob = Mat4::from_translation(Vec3::new(0.0, (time * 1.3 + m.phase).sin() * 0.07 - 0.12, 0.0))
+            let bob = Mat4::from_translation(Vec3::new(0.0, (time * 1.3 + m.phase).sin() * 0.05 + 0.1, 0.0))
                 * Mat4::from_rotation_z((time * 0.9 + m.phase).sin() * 0.05)
                 * Mat4::from_rotation_x((time * 1.1 + m.phase).cos() * 0.04);
             let model = bob * m.base;

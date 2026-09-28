@@ -80,8 +80,10 @@ fn shadow(world: vec3f, n: vec3f) -> f32 {
             sum += textureSampleCompareLevel(shadow_map, shadow_samp, uv + vec2f(f32(x), f32(y)) * t * 1.5, ndc.z - 0.0015);
         }
     }
-    let inside = all(uv > vec2f(0.0)) && all(uv < vec2f(1.0)) && ndc.z < 1.0;
-    return select(1.0, sum / 9.0, inside);
+    // Fade to unshadowed toward the map's edge so its border never shows as a hard line.
+    let edge = min(min(uv.x, uv.y), min(1.0 - uv.x, 1.0 - uv.y));
+    let fade = smoothstep(0.0, 0.08, edge) * select(0.0, 1.0, ndc.z < 1.0);
+    return mix(1.0, sum / 9.0, fade);
 }
 
 fn lit(albedo: vec3f, n: vec3f, world: vec3f, shine: f32) -> vec3f {
@@ -90,7 +92,7 @@ fn lit(albedo: vec3f, n: vec3f, world: vec3f, shine: f32) -> vec3f {
     let ndl = max(dot(n, l), 0.0);
     let sh = shadow(world, n);
     let ground = vec3f(0.18, 0.16, 0.12);
-    let ambient = mix(ground, g.sky_top.rgb, n.y * 0.5 + 0.5) * 0.55 + g.sky_horizon.rgb * 0.08;
+    let ambient = mix(ground, g.sky_top.rgb, n.y * 0.5 + 0.5) * 0.45 + g.sky_horizon.rgb * 0.06;
     let h = normalize(l + v);
     let spec = pow(max(dot(n, h), 0.0), 48.0) * shine * ndl;
     return albedo * (ambient + g.sun_color.rgb * ndl * sh) + g.sun_color.rgb * spec * sh;
@@ -98,7 +100,7 @@ fn lit(albedo: vec3f, n: vec3f, world: vec3f, shine: f32) -> vec3f {
 
 fn fog(c: vec3f, world: vec3f) -> vec3f {
     let d = distance(g.camera_pos.xyz, world);
-    let f = 1.0 - exp(-max(d - 20.0, 0.0) * 0.012);
+    let f = 1.0 - exp(-max(d - 40.0, 0.0) * 0.01);
     return mix(c, g.sky_horizon.rgb, f);
 }
 
@@ -163,7 +165,7 @@ struct SkyOut {
     let n = normalize(in.normal);
     let y = in.world.y;
     let k = noise2(in.uv * 1.7) * 0.6 + noise2(in.uv * 6.0) * 0.4;
-    let sand = vec3f(0.78, 0.66, 0.44) * (0.9 + k * 0.2);
+    let sand = vec3f(0.62, 0.52, 0.34) * (0.9 + k * 0.2);
     let grass = mix(vec3f(0.16, 0.34, 0.08), vec3f(0.34, 0.46, 0.14), k);
     let rock = vec3f(0.42, 0.40, 0.37) * (0.8 + k * 0.4);
     var c = mix(sand, grass, smoothstep(0.12, 0.35, y + (k - 0.5) * 0.15));
