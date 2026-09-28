@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>wgpu-test</title>
+<meta name="description" content="Teknisk test: Rust + wgpu i nettleseren, WebGPU med WebGL2 som reserve.">
+<style>
+  :root { color-scheme: dark; --fg: #eef2f4; --dim: #a9b6bd; --panel: rgba(12, 20, 26, 0.62); }
+  html, body { margin: 0; height: 100%; background: #0b1318; color: var(--fg);
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+  .panel { position: fixed; background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 14px; }
+  #hud { top: max(12px, env(safe-area-inset-top)); left: 12px; max-width: min(360px, calc(100vw - 48px)); }
+  #hud h1 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+  #hud p { margin: 0; color: var(--dim); font-size: 13px; }
+  #hud .row { font-variant-numeric: tabular-nums; }
+  #sun { bottom: max(12px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px; align-items: center; width: min(420px, calc(100vw - 48px)); box-sizing: border-box; }
+  #sun label { color: var(--dim); white-space: nowrap; font-size: 13px; }
+  #sun input { flex: 1; accent-color: #f0a55a; }
+  #err { display: none; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: calc(100vw - 64px); }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud" class="panel">
+  <h1>wgpu i nettleseren</h1>
+  <p id="backend">Starter GPU …</p>
+  <p class="row" id="stats"></p>
+  <p id="load"></p>
+</div>
+<div id="sun" class="panel">
+  <label for="t">Tid på døgnet</label>
+  <input id="t" type="range" min="0" max="1" step="0.001" value="0.42">
+</div>
+<div id="err" class="panel"></div>
+<script type="module" src="main.js"></script>
+</body>
+</html>
