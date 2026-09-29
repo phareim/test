@@ -9,14 +9,14 @@ const MODELS = [
   ["stump", -4.5, -2.8, 0.7, 0.0, false],
   ["treasure-chest", -0.8, 2.6, 0.6, -0.5, false],
   ["rowboat", 10.5, 7.0, 2.8, 0.9, true],
-  ["fox-pixal3d", 2.6, -1.0, 1.4, 0.5, false],
-  ["fox-trellis", 4.4, 0.4, 1.4, 0.5, false],
+  ["fox-pixal3d", 0.6, -3.4, 2.0, 0.6, false],
+  ["fox-trellis", 3.4, -2.2, 2.0, 0.6, false],
 ];
 
 // Floating labels above the two fox test models (same GLB pipeline, 20k triangles each).
 const LABELS = [
-  { text: "Pixal3D · 7 min", x: 2.6, y: 1.9, z: -1.0, cls: "a" },
-  { text: "TRELLIS.2 · 2 t 55 min", x: 4.4, y: 1.9, z: 0.4, cls: "b" },
+  { text: "Pixal3D · 7 min", x: 0.6, y: 2.5, z: -3.4, cls: "a" },
+  { text: "TRELLIS.2 · 2 t 55 min", x: 3.4, y: 2.5, z: -2.2, cls: "b" },
 ];
 
 const $ = (id) => document.getElementById(id);
