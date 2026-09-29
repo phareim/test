@@ -403,6 +403,20 @@ impl App {
         self.sun = t.clamp(0.0, 1.0);
     }
 
+    /// Screen position of a world point for HTML labels: [x, y] in 0..1 from the top left, and 1.0 when the point is in front of the camera.
+    pub fn project(&self, x: f32, y: f32, z: f32) -> Vec<f32> {
+        let aspect = self.config.width as f32 / self.config.height as f32;
+        let target = Vec3::new(0.0, 1.2, 0.0);
+        let eye = target
+            + self.dist * Vec3::new(self.pitch.cos() * self.yaw.sin(), self.pitch.sin(), self.pitch.cos() * self.yaw.cos());
+        let view_proj = proj::perspective(0.8, aspect, 0.1, 400.0) * look_at_mat4(eye, target, Vec3::Y);
+        let c = view_proj * Vec3::new(x, y, z).extend(1.0);
+        if c.w <= 0.0 {
+            return vec![0.0, 0.0, 0.0];
+        }
+        vec![(c.x / c.w) * 0.5 + 0.5, 0.5 - (c.y / c.w) * 0.5, 1.0]
+    }
+
     pub fn info(&self) -> String {
         self.info.clone()
     }

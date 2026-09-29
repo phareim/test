@@ -9,6 +9,14 @@ const MODELS = [
   ["stump", -4.5, -2.8, 0.7, 0.0, false],
   ["treasure-chest", -0.8, 2.6, 0.6, -0.5, false],
   ["rowboat", 10.5, 7.0, 2.8, 0.9, true],
+  ["fox-pixal3d", 2.6, -1.0, 1.4, 0.5, false],
+  ["fox-trellis", 4.4, 0.4, 1.4, 0.5, false],
+];
+
+// Floating labels above the two fox test models (same GLB pipeline, 20k triangles each).
+const LABELS = [
+  { text: "Pixal3D · 7 min", x: 2.6, y: 1.9, z: -1.0, cls: "a" },
+  { text: "TRELLIS.2 · 2 t 55 min", x: 4.4, y: 1.9, z: 0.4, cls: "b" },
 ];
 
 const $ = (id) => document.getElementById(id);
@@ -74,6 +82,23 @@ async function main() {
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+
+  const labels = LABELS.map((l) => {
+    const el = document.createElement("div");
+    el.className = `tag ${l.cls}`;
+    el.textContent = l.text;
+    document.body.appendChild(el);
+    return { ...l, el };
+  });
+  function placeLabels() {
+    for (const l of labels) {
+      const [sx, sy, ok] = app.project(l.x, l.y, l.z);
+      l.el.style.display = ok && sx > -0.1 && sx < 1.1 ? "block" : "none";
+      l.el.style.transform = `translate(${(sx * innerWidth).toFixed(1)}px, ${(sy * innerHeight).toFixed(1)}px) translate(-50%, -100%)`;
+    }
+    requestAnimationFrame(placeLabels);
+  }
+  requestAnimationFrame(placeLabels);
 
   // Models stream in one by one while the island is already rendering.
   let done = 0;
